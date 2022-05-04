@@ -41,10 +41,25 @@ public:
    // Construct
    //
 
-   stack()                              { container.resize(7); }
-   stack(const stack &  rhs)            { container.resize(7); }
-   stack(      stack && rhs)            { container.resize(7); }
-   stack(const std::vector<int> &  rhs) { container.resize(7); }
+   stack()                              { container.resize(0); }
+   stack(const stack &  rhs)            
+   { 
+         container = rhs.container;
+   }
+
+   stack(      stack && rhs)            
+   { 
+     container = rhs.container; 
+     container.reserve(rhs.container.capacity());
+     rhs.container.clear();         // Clear the vector container
+     rhs.container.shrink_to_fit(); // Resize container to size 0
+   }
+   stack(const std::vector<int> &  rhs) 
+   { 
+      container.resize(7); 
+   }
+
+
    stack(      std::vector<int> && rhs) { container.resize(7); }
    ~stack()                             { container.resize(7); }
 
@@ -62,7 +77,7 @@ public:
    }
    void swap(stack& rhs)
    {
-
+      container.swap(rhs.container);
    }
 
    //
@@ -89,8 +104,8 @@ public:
    // Status
    // 
 
-   size_t size () const { return 99;   }
-   bool empty  () const { return true; }
+   size_t size () const { return container.size(); }
+   bool empty  () const { return container.empty(); }
    
 private:
    

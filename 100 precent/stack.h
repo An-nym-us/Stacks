@@ -100,7 +100,7 @@ public:
    //
    // Status
    //
-   size_t  size () const { return 99;  }
+   size_t  size () const { return container.size(); }
    bool empty   () const { return true; }
    
 private:
