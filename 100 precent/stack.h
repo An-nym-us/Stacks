@@ -71,8 +71,15 @@ public:
    // Access
    //
 
-         T& top()       { return *(new T); }
-   const T& top() const { return *(new T); }
+   T& top()       
+   { 
+      return *(new T); 
+      
+   }
+   const T& top() const 
+   { 
+      return *(new T); 
+   }
 
    // 
    // Insert
