@@ -62,7 +62,7 @@ public:
 
 
 
-   ~stack()                             { container.clear(); }
+
 
    //
    // Assign
