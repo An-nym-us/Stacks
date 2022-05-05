@@ -60,8 +60,11 @@ public:
    }
 
 
-   stack(      std::vector<int> && rhs) { container.resize(7); }
-   ~stack()                             { container.resize(7); }
+   stack(      std::vector<int> && rhs) 
+   { 
+      container.resize(7); 
+   }
+   ~stack()                             { container.clear(); }
 
    //
    // Assign
