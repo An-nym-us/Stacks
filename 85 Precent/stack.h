@@ -22,7 +22,7 @@
 
 #include <cassert>  // because I am paranoid
 #include <vector>
-
+#include <iostream>
 class TestStack; // forward declaration for unit tests
 
 namespace custom
@@ -42,28 +42,26 @@ public:
    //
 
    stack()                              { container.resize(0); }
-   stack(const stack &  rhs)            
-   { 
-         container = rhs.container;
+   stack(const stack &  rhs)            {
+       container = rhs.container;
+   }
+   stack(stack && rhs)            {
+       container = rhs.container;
+       container.reserve(rhs.container.capacity());
+       rhs.container.clear(); // Clear the Vector container
+       rhs.container.shrink_to_fit(); // Resize container to size 0;
+   }
+    // Copy Initializer
+    stack(const std::vector<int> &  rhs): container{rhs} {}
+    // Move Initializer
+    stack(      std::vector<int> && rhs): container{std::move(rhs)} {}
+    //       container = std::move(rhs);}
+   ~stack(){
+       container.resize(7);
    }
 
-   stack(      stack && rhs)            
-   { 
-     container = rhs.container; 
-     container.reserve(rhs.container.capacity());
-     rhs.container.clear();         // Clear the vector container
-     rhs.container.shrink_to_fit(); // Resize container to size 0
-   }
-   stack(const std::vector<int> &  rhs) 
-   { 
-      container.resize(7); 
-   }
 
 
-   stack(      std::vector<int> && rhs) 
-   { 
-      container.resize(7); 
-   }
    ~stack()                             { container.clear(); }
 
    //
@@ -72,43 +70,64 @@ public:
 
    stack & operator = (const stack & rhs)
    {
+       // clear out the old data
+       container.clear();
+       container = rhs.container;
       return *this;
    }
    stack & operator = (stack && rhs)
    {
+       container = std::move(rhs.container);
       return *this;
    }
    void swap(stack& rhs)
    {
-      container.swap(rhs.container);
+       container.swap(rhs.container);
    }
 
    //
    // Access
    //
 
-         int& top()       { return *(new int); }
-   const int& top() const { return *(new int); }
+         int& top()       {
+             int lastEl = int(container.size())-1;
+             return container[lastEl];
+         }
+   const int& top() const {
+       int lastEl = int(container.size())-1;
+       return container[lastEl];
+   }
 
    //
    // Insert
    //
 
-   void push(const int&  t) { }
-   void push(      int&& t) { }
+   void push(const int&  t) {
+       container.push_back(t);
+   }
+   void push(      int&& t) {
+       container.push_back(t);
+   }
 
    //
    // Remove
    //
 
-   void pop() { }
+   void pop() {
+       if(empty()){
+           throw std::out_of_range("No Elements to Remove");
+       }
+       
+       container.pop_back();
+       
+   }
 
    //
    // Status
    // 
 
-   size_t size () const { return container.size(); }
-   bool empty  () const { return container.empty(); }
+    size_t size () const { return container.size();  }
+    bool empty  () const { return container.empty(); }
    
 private:
    
