@@ -41,24 +41,18 @@ public:
    // Construct
    //
 
-   stack()                              { container.resize(0); }
-   stack(const stack &  rhs)            {
-       container = rhs.container;
-   }
-   stack(stack && rhs)            {
-       container = rhs.container;
-       container.reserve(rhs.container.capacity());
-       rhs.container.clear(); // Clear the Vector container
-       rhs.container.shrink_to_fit(); // Resize container to size 0;
-   }
+   stack()                   {container.resize(0); }
+   stack(const stack &  rhs) {container = rhs.container; }
+   stack(stack&& rhs) :       container{ std::move(rhs.container)}   {};
+      
+   
     // Copy Initializer
     stack(const std::vector<int> &  rhs): container{rhs} {}
     // Move Initializer
-    stack(      std::vector<int> && rhs): container{std::move(rhs)} {}
+    stack(std::vector<int> && rhs): container{std::move(rhs)} {}
     //       container = std::move(rhs);}
-   ~stack(){
-       container.resize(7);
-   }
+
+   ~stack(){container.resize(7); }
 
 
 
